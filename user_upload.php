@@ -1,5 +1,27 @@
 <?php
 
+// Define command line options
+$options = getopt("u:p:h:", ["file:", "create_table", "dry_run", "help"]);
+
+// Display help message if --help option is present
+if (isset($options['help'])) {
+    echo "Usage: php script.php --file <csv_file_name> --create_table --dry_run -u <mysql_username> -p <mysql_password> -h <mysql_host>\n";
+    echo "--file [csv file name] - Name of the CSV to be parsed\n";
+    echo "--create_table - Build the MySQL users table (no further action will be taken)\n";
+    echo "--dry_run - Run the script without inserting into the DB (other functions will be executed, but the database won't be altered)\n";
+    echo "-u - MySQL username\n";
+    echo "-p - MySQL password\n";
+    echo "-h - MySQL host\n";
+    echo "--help - Display this help message\n";
+    exit(0);
+}
+
+// Check for required options
+if (!isset($options['file']) || !isset($options['u']) || !isset($options['p']) || !isset($options['h'])) {
+    echo "Missing required options. Use --help for usage information.\n";
+    exit(1);
+}
+
 // Extract options
 $csvFilePath = $options['file'];
 $createTable = isset($options['create_table']);
